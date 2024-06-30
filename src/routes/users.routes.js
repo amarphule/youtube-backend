@@ -17,7 +17,7 @@ router.route("/register").post(
   registerUser
 );
 
-// if I dont pass middleware requestAnimationFrame.body is empty why?
+// if I dont pass middleware req.body is empty why?
 // router.post("/register", registerUser);
 
 export default router;
