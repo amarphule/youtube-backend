@@ -15,5 +15,5 @@ connectionDB()
     });
   })
   .catch((error) => {
-    console.log(`Failed o connect port: ${port},Error: ${error}`);
+    console.log(`Failed o connect port: ${PORT},Error: ${error}`);
   });
