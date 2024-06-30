@@ -3,7 +3,18 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { json } from "express";
+
+// Generate acccess and refresh token
+const generateAccessAndRefreshToken = async (userId) => {
+  const user = await User.findById(userId);
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+
+  user.refreshToken = refreshToken;
+  user.save({ validateBeforeSave: false });
+
+  return { accessToken, refreshToken };
+};
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, username, email, password } = req.body;
@@ -69,22 +80,9 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, createduser, "User Created successfully"));
 });
 
-const generateAccessAndRefreshToken = async (userId) => {
-  const user = await User.findById({ userId });
-
-  const accessToken = user.generateAccessToken();
-  const refreshToken = user.generateRefreshToken();
-
-  user.refreshToken = refreshToken;
-  user.save({ validateBeforeSave: false });
-
-  return { accessToken, refreshToken };
-};
-
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
-
-  if (!email || !username) {
+  if (!(email || username)) {
     throw new ApiError(400, "Email or Password is required");
   }
 
