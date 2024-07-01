@@ -12,9 +12,9 @@ app.use(
 );
 
 // Common middlewares
-app.use(express.json({ limit: "16kb " }));
+app.use(express.json({ limit: "500kb" }));
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.urlencoded({ limit: "500kb", extended: true }));
 app.use(cookieParser());
 
 // Routes
