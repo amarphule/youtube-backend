@@ -88,6 +88,10 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ $or: [{ username }, { email }] });
 
+  if (!user) {
+    throw new ApiError(400, "Invalid Credentials");
+  }
+
   const isValidPassword = user.isPasswordCorrect(password);
 
   if (!isValidPassword) {
